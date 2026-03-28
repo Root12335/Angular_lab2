@@ -1,5 +1,11 @@
 <h2 class="text-center my-4">Available Courses</h2>
 
+<p class="text-center text-muted small mb-2">
+  Pipe demo:
+  <code>1000 | discount</code> → {{ 1000 | discount }} &nbsp;|&nbsp;
+  <code>1000 | discount:20</code> → {{ 1000 | discount:20 }}
+</p>
+
 <div class="mb-4 w-50 m-auto">
   <label class="form-label fw-bold">Filter by Category</label>
   <select class="form-select form-select-lg" [(ngModel)]="selectedCategory"> 
@@ -31,7 +37,12 @@
             <p class="card-text">
               <strong>Instructor:</strong> {{ course.instructor }}
             </p>
-            <p class="card-text"><strong>Price:</strong> ${{ course.price }}</p>
+            <p class="card-text">
+              <strong>Price (10% off):</strong> ${{ course.price | discount }}
+            </p>
+            <p class="card-text small text-muted mb-0">
+              <strong>20% off:</strong> ${{ course.price | discount:20 }}
+            </p>
 
             @if (course.seats === 0) {
               <p class="card-text fw-bold text-danger">Course Full</p>
@@ -44,9 +55,11 @@
             }
 
             <button
+              type="button"
               class="btn btn-primary mt-2"
+              appDisableAfterClick
+              [appDisableAfterClickDisabled]="course.seats === 0"
               (click)="register(course)"
-              [disabled]="course.seats === 0"
             >
               Register
             </button>

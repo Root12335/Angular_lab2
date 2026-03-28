@@ -2,10 +2,18 @@ import { Component } from '@angular/core';
 import { ICourse } from '../../models/icourse';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgStyle } from '@angular/common';
+import { DiscountPipe } from '../../pipes/discount.pipe';
+import { DisableAfterClickDirective } from '../../directives/disable-after-click.directive';
 
 @Component({
   selector: 'app-courses',
-  imports: [FormsModule, NgClass, NgStyle],
+  imports: [
+    FormsModule,
+    NgClass,
+    NgStyle,
+    DiscountPipe,
+    DisableAfterClickDirective,
+  ],
   templateUrl: './courses.html',
   styleUrl: './courses.css',
 })
