@@ -1,61 +1,57 @@
-<h2 class="text-center my-4">Available Courses</h2>
-
-<div class="mb-4 w-50 m-auto">
-  <label class="form-label fw-bold">Filter by Category</label>
-  <select class="form-select form-select-lg" [(ngModel)]="selectedCategory">
-    @for (cat of categories; track cat) {
-      <option [value]="cat">{{ cat }}</option>
-    }
-  </select>
-</div>
-
 <div class="row row-cols-1 row-cols-md-3 g-4 m-3">
-  @for (course of courses; track course.id) {
-    @if (selectedCategory === 'All' || course.category === selectedCategory) {
-      <div class="col">
-        <div
-          class="card h-100"
-          [ngClass]="{ 'text-danger': course.seats === 0 }"
-          [ngStyle]="{
-            'background-color':
-              course.seats === 0 ? '#ffe0e0' : course.seats <= 2 ? '#fff3cd' : 'white',
-          }"
-        >
-          <img [src]="course.Image" class="card-img-top" alt="course image" />
-          <div class="card-body">
-            <h5 class="card-title">{{ course.title }}</h5>
-            <p class="card-text"><strong>Instructor:</strong> {{ course.instructor }}</p>
-            <p class="card-text">
-              <strong>Price (10% off):</strong> ${{ course.price | discount }}
-            </p>
-            <p class="card-text small text-muted mb-0">
-              <strong>20% off:</strong> ${{ course.price | discount: 20 }}
-            </p>
+  @for (course of filteredCourses; track course.id) {
+    <div class="col">
+      <div
+        class="card h-100"
+        [ngClass]="{ 'text-danger': course.seats === 0 }"
+        [ngStyle]="{
+          'background-color':
+            course.seats === 0 ? '#ffe0e0' : course.seats <= 2 ? '#fff3cd' : 'white',
+        }"
+      >
+        <img [src]="course.Image" class="card-img-top" alt="course image" />
+        <div class="card-body">
+          <h5 class="card-title">{{ course.title }}</h5>
+          <p class="card-text"><strong>Instructor:</strong> {{ course.instructor }}</p>
+          <p class="card-text">
+            <strong>Price (10% off):</strong> {{ course.price | discount | currency: 'USD' }}
+          </p>
+          <p class="card-text small text-muted mb-0">
+            <strong>20% off:</strong> {{ course.price | discount: 20 | currency: 'USD' }}
+          </p>
 
-            @if (course.seats === 0) {
-              <p class="card-text fw-bold text-danger">Course Full</p>
-            } @else if (course.seats <= 2) {
-              <p class="card-text fw-bold text-warning">
-                Almost Full — {{ course.seats }} seat(s) left
-              </p>
-            } @else {
-              <p class="card-text">Seats Available: {{ course.seats }}</p>
-            }
+          @if (course.seats === 0) {
+            <p class="card-text fw-bold text-danger">Course Full</p>
+          } @else if (course.seats <= 2) {
+            <p class="card-text fw-bold text-warning">
+              Almost Full — {{ course.seats }} seat(s) left
+            </p>
+          } @else {
+            <p class="card-text">Seats Available: {{ course.seats }}</p>
+          }
 
-            <button
-              type="button"
-              class="btn btn-primary mt-2"
-              appDisableAfterClick
-              [appDisableAfterClickDisabled]="course.seats === 0"
-              (click)="register(course)"
-            >
-              Register
-            </button>
-          </div>
+          <input type="number" #quantityInp class="form-control mb-2" placeholder="Qty" />
+          <button
+            class="btn btn-success me-2"
+            (click)="buy(course.price, quantityInp.value)"
+            [disabled]="course.seats === 0"
+          >
+            Buy
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            appDisableAfterClick
+            [appDisableAfterClickDisabled]="course.seats === 0"
+          >
+            Register
+          </button>
         </div>
       </div>
-    }
+    </div>
   } @empty {
-    <h3 class="text-center">No courses to view</h3>
+    <div class="w-100">
+      <div class="w-70 m-auto"><h1>No courses to view</h1></div>
+    </div>
   }
 </div>

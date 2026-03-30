@@ -1,0 +1,14 @@
+<h1>Order amount is : {{ totalOrderPrice }}</h1>
+<div class="m-5">
+  <div class="mb-3 w-50 m-auto">
+    <label class="form-label fw-bold">Categories</label>
+    <select class="form-select form-select-lg" [(ngModel)]="selectedCatId">
+      <option value="0" selected>All</option>
+      @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
+
+  <app-courses [sentSelectedCatId]="selectedCatId" (onTotalOrderPriceChanged)="setTotalOrderPrice($event)"></app-courses>
+</div>
