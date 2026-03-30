@@ -2,7 +2,7 @@
 
 <div class="mb-4 w-50 m-auto">
   <label class="form-label fw-bold">Filter by Category</label>
-  <select class="form-select form-select-lg" [(ngModel)]="selectedCategory"> 
+  <select class="form-select form-select-lg" [(ngModel)]="selectedCategory">
     @for (cat of categories; track cat) {
       <option [value]="cat">{{ cat }}</option>
     }
@@ -18,20 +18,19 @@
           [ngClass]="{ 'text-danger': course.seats === 0 }"
           [ngStyle]="{
             'background-color':
-              course.seats === 0
-                ? '#ffe0e0'
-                : course.seats <= 2
-                  ? '#fff3cd'
-                  : 'white'
+              course.seats === 0 ? '#ffe0e0' : course.seats <= 2 ? '#fff3cd' : 'white',
           }"
         >
           <img [src]="course.Image" class="card-img-top" alt="course image" />
           <div class="card-body">
             <h5 class="card-title">{{ course.title }}</h5>
+            <p class="card-text"><strong>Instructor:</strong> {{ course.instructor }}</p>
             <p class="card-text">
-              <strong>Instructor:</strong> {{ course.instructor }}
+              <strong>Price (10% off):</strong> ${{ course.price | discount }}
             </p>
-            <p class="card-text"><strong>Price:</strong> ${{ course.price }}</p>
+            <p class="card-text small text-muted mb-0">
+              <strong>20% off:</strong> ${{ course.price | discount: 20 }}
+            </p>
 
             @if (course.seats === 0) {
               <p class="card-text fw-bold text-danger">Course Full</p>
@@ -44,9 +43,11 @@
             }
 
             <button
+              type="button"
               class="btn btn-primary mt-2"
+              appDisableAfterClick
+              [appDisableAfterClickDisabled]="course.seats === 0"
               (click)="register(course)"
-              [disabled]="course.seats === 0"
             >
               Register
             </button>
