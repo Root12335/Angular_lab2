@@ -1,5 +1,5 @@
 <div class="row row-cols-1 row-cols-md-3 g-4 m-3">
-  @for (course of filteredCourses; track course.id) {
+  @for (course of filteredCourses(); track course.id) {
     <div class="col">
       <div
         class="card h-100"
@@ -9,7 +9,12 @@
             course.seats === 0 ? '#ffe0e0' : course.seats <= 2 ? '#fff3cd' : 'white',
         }"
       >
-        <img [src]="course.Image" class="card-img-top" alt="course image" />
+        <img
+          [src]="getCourseImage(course)"
+          (error)="handleImageError($event)"
+          class="card-img-top"
+          alt="course image"
+        />
         <div class="card-body">
           <h5 class="card-title">{{ course.title }}</h5>
           <p class="card-text"><strong>Instructor:</strong> {{ course.instructor }}</p>

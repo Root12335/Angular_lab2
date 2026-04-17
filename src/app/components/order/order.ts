@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Courses } from '../courses/courses';
 import { ICategory } from '../../models/icategory';
 import { FormsModule } from '@angular/forms';
-import { CategoriesService } from '../../services/categories';
+import { ApiCategories } from '../../services/api-categories';
 
 @Component({
   selector: 'app-order',
@@ -10,11 +10,17 @@ import { CategoriesService } from '../../services/categories';
   templateUrl: './order.html',
   styleUrl: './order.css',
 })
-export class Order {
-  selectedCatId: number = 0;
+export class Order implements OnInit {
+  selectedCatId: string = '0';
   totalOrderPrice: number = 0;
-  private categoriesService = inject(CategoriesService);
-  categories: ICategory[] = this.categoriesService.getAllCategories();
+  private apiCategoriesService = inject(ApiCategories);
+  categories = signal<ICategory[]>([]);
+
+  ngOnInit(): void {
+    this.apiCategoriesService.getAllCategories().subscribe((res) => {
+      this.categories.set(res);
+    });
+  }
 
   setTotalOrderPrice(receivedOrderPrice: number) {
     this.totalOrderPrice = receivedOrderPrice;
